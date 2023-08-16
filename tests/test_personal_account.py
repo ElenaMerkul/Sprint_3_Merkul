@@ -1,41 +1,38 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.by import By
 from locators import Locators
 class TestPersonalAccount():
     def test_go_to_personal_account(self, driver):
-        driver.find_element(By.XPATH, ".//nav/a/p").click()
+        driver.find_element(*Locators.BUTTON_PERSONAL_ACCOUNT).click()
         assert 'https://stellarburgers.nomoreparties.site/login' in driver.current_url
     def test_go_from_personal_account_to_logo(self, driver):
         driver.maximize_window()
-        driver.find_element(By.XPATH, ".//nav/a/p").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "Auth_login__3hAey")))
-        driver.find_element(By.XPATH, "html/body/div/div/header/nav/div").click()
+        driver.find_element(*Locators.BUTTON_PERSONAL_ACCOUNT).click()
+        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.FORM_OF_LOGIN))
+        driver.find_element(*Locators.LOGO).click()
 
-        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//section[1]/h1"))).text
+        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.HEADER_OF_CONSTRUCTOR)).text
         assert text == "Соберите бургер"
     def test_go_from_personal_account_to_constructor(self, driver):
-        driver.find_element(By.XPATH, ".//nav/a/p").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "Auth_login__3hAey")))
-        driver.find_element(By.XPATH, ".//p[text()='Конструктор']").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".text_type_main-large")))
+        driver.find_element(*Locators.BUTTON_PERSONAL_ACCOUNT).click()
+        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.FORM_OF_LOGIN))
+        driver.find_element(*Locators.BUTTON_CONSTRUCTOR).click()
 
-        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//section[1]/h1"))).text
+        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.HEADER_OF_CONSTRUCTOR)).text
         assert text == "Соберите бургер"
 
     def test_go_out_from_personal_account(self, driver):
         email = "merkulelena122@mail.ru"
         password = "123456"
 
-        driver.find_element(By.XPATH, ".//nav/a/p").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "Auth_login__3hAey")))
-        driver.find_element(By.XPATH, ".//input").send_keys(email)
-        driver.find_element(By.XPATH, ".//input[@type='password']").send_keys(password)
+        driver.find_element(*Locators.BUTTON_PERSONAL_ACCOUNT).click()
+        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.FORM_OF_LOGIN))
+        driver.find_element(*Locators.EMAIL_INPUT).send_keys(email)
+        driver.find_element(*Locators.PASSWORD_INPUT).send_keys(password)
         driver.find_element(*Locators.BUTTON_LOGIN).click()
-        driver.find_element(By.XPATH, ".//nav/a/p").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//button[text()='Выход']")))
-        driver.find_element(By.XPATH, ".//button[text()='Выход']").click()
-        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "Auth_login__3hAey")))
+        driver.find_element(*Locators.BUTTON_PERSONAL_ACCOUNT).click()
+        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.BUTTON_LOGOUT))
+        driver.find_element(*Locators.BUTTON_LOGOUT).click()
 
-        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, ".//button[contains(@class,'button_button_type_primary')]"))).text
+        text = WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(Locators.BUTTON_LOGIN)).text
         assert text == "Войти"
